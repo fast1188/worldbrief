@@ -156,3 +156,12 @@ MIT — 自由使用、修改、商用。
 - 🐛 提 Issue
 - 🔀 提 PR
 - 📣 分享给身边的朋友
+
+
+## 💬 联系
+
+扫码加微信群（AI 工具使用 / 提 issue / 需求讨论）：
+
+![微信群](assets/wechat-qr.png)
+
+或提 [GitHub Issue](https://github.com/fast118/worldbrief/issues)
