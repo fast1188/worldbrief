@@ -1,0 +1,13 @@
+# editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# build
+node_modules/
+dist/
+
+# logs
+*.log
