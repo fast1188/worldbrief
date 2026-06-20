@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WorldBrief · 世界速览</title>
-  <meta name="description" content="中文世界信息聚合仪表盘 — 微博 / 知乎 / 36kr / Hacker News / GitHub / V2EX / 抖音 / B站 / 地震 / 掘金 一屏速览 10 大源" />
+  <meta name="description" content="中文世界信息聚合仪表盘 — GitHub Trending Top 5 / GitHub Trending Top 10 / 微博 / 知乎 / 36kr / Hacker News / V2EX / 抖音 / B站 / 地震 / 掘金 一屏速览 11 大源" />
   <style>
     :root {
       --bg: #0b0d12;
@@ -137,7 +137,7 @@
         <div class="logo">WB</div>
         <div>
           <h1>WorldBrief · 世界速览</h1>
-          <div class="tagline">中文世界信息聚合 · 一屏速览 10 大源</div>
+          <div class="tagline">中文世界信息聚合 · 一屏速览 11 大源</div>
         </div>
       </div>
       <div class="controls">
@@ -162,7 +162,7 @@
         MIT License
       </p>
       <p style="margin-top: 8px;">
-        数据源: 微博 / 知乎 / 36kr / Hacker News / GitHub Trending / V2EX / 抖音 / B站 / 全球地震 / 掘金
+        数据源: GitHub Trending Top 5 / Top 10 / 微博 / 知乎 / 36kr / Hacker News / V2EX / 抖音 / B站 / 全球地震 / 掘金
       </p>
     </div>
   </div>
@@ -174,6 +174,35 @@
   const REFRESH_MS = 5 * 60 * 1000;                    // 5 min auto-refresh
 
   const SOURCES = [
+    {
+      id: 'github_top5', emoji: '⭐', name: 'GitHub Trending Top 5', limit: 5,
+      url: encodeURIComponent('https://github.com/trending'),
+      transform: (html) => {
+        const items = [];
+        const articleRe = /<article class="Box-row">([\s\S]*?)<\/article>/g;
+        let m;
+        while ((m = articleRe.exec(html)) && items.length < 5) {
+          const block = m[1];
+          const pathMatch = block.match(/href="(\/[^"\/]+\/[^"\/]+)"/);
+          if (!pathMatch) continue;
+          const path = pathMatch[1];
+          const titleMatch = block.match(/<h2[^>]*>\s*<a[^>]*>([\s\S]*?)<\/a>/);
+          const title = titleMatch ? titleMatch[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() : path.replace('/', '/');
+          const descMatch = block.match(/<p class="col-9[^"]*">([\s\S]*?)<\/p>/);
+          const desc = descMatch ? descMatch[1].replace(/<[^>]+>/g, '').trim().slice(0, 60) : '';
+          const langMatch = block.match(/<span itemprop="programmingLanguage">([^<]+)<\/span>/);
+          const lang = langMatch ? langMatch[1].trim() : '';
+          const todayMatch = block.match(/<span class="d-inline-block float-sm-right">([\d,]+)\s*stars today<\/span>/);
+          const todayStars = todayMatch ? todayMatch[1] : '';
+          items.push({
+            title,
+            url: `https://github.com${path}`,
+            meta: (lang ? lang + ' · ' : '') + (todayStars ? '🔥 +' + todayStars + ' today' : 'Trending')
+          });
+        }
+        return items;
+      }
+    },
     {
       id: 'wb', emoji: '🔥', name: '微博热搜', limit: 20,
       url: encodeURIComponent('https://weibo.com/ajax/side/hotSearch'),
@@ -216,18 +245,49 @@
       }))
     },
     {
-      id: 'github', emoji: '⭐', name: 'GitHub Trending', limit: 15,
+      id: 'github', emoji: '⭐', name: 'GitHub Trending', limit: 10,
       url: encodeURIComponent('https://github.com/trending'),
       transform: (html) => {
+        // v0.2: rich meta (stars, language, description) + filter >1k stars
         const items = [];
-        const re = /<h2[^>]*>\s*<a[^>]*href="(\/[^"]+)"[^>]*>([\s\S]*?)<\/a>/g;
+        // GitHub Trending 使用 <article class="Box-row"> 包裹每个项目
+        const articleRe = /<article class="Box-row">([\s\S]*?)<\/article>/g;
         let m;
-        while ((m = re.exec(html)) && items.length < 15) {
-          const path = m[1].replace(/\/blob\/.*/, '');
-          const title = m[2].replace(/<[^>]+>/g, '').trim();
-          items.push({ title, url: `https://github.com${path}`, meta: 'Trending' });
+        while ((m = articleRe.exec(html)) && items.length < 15) {
+          const block = m[1];
+          // repo path
+          const pathMatch = block.match(/href="(\/[^"\/]+\/[^"\/]+)"/);
+          if (!pathMatch) continue;
+          const path = pathMatch[1];
+          // title (owner / repo)
+          const titleMatch = block.match(/<h2[^>]*>\s*<a[^>]*>([\s\S]*?)<\/a>/);
+          const title = titleMatch ? titleMatch[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() : path.replace('/', '/');
+          // description
+          const descMatch = block.match(/<p class="col-9[^"]*">([\s\S]*?)<\/p>/);
+          const desc = descMatch ? descMatch[1].replace(/<[^>]+>/g, '').trim() : '';
+          // language
+          const langMatch = block.match(/<span itemprop="programmingLanguage">([^<]+)<\/span>/);
+          const lang = langMatch ? langMatch[1].trim() : '';
+          // total stars
+          const starsMatch = block.match(/<a href="\/[^"]+\/[^"]+\/stargazers"[^>]*>\s*<svg[\s\S]*?<\/svg>\s*([\d,]+)/);
+          const totalStars = starsMatch ? starsMatch[1].replace(/,/g, '') : '';
+          // stars today (in <span class="d-inline-block float-sm-right">)
+          const todayMatch = block.match(/<span class="d-inline-block float-sm-right">([\d,]+)\s*stars today<\/span>/);
+          const todayStars = todayMatch ? todayMatch[1].replace(/,/g, '') : '';
+          // meta line
+          const parts = [];
+          if (lang) parts.push(lang);
+          if (totalStars) parts.push('★' + (parseInt(totalStars) >= 1000 ? (parseInt(totalStars) / 1000).toFixed(1) + 'k' : totalStars));
+          if (todayStars) parts.push('+' + todayStars + ' today');
+          const meta = parts.join(' · ');
+          items.push({
+            title: title.replace(/\s*$/, ''),
+            url: `https://github.com${path}`,
+            meta: meta || 'Trending',
+            desc: desc.slice(0, 80)
+          });
         }
-        return items;
+        return items.slice(0, 10);
       }
     },
     {

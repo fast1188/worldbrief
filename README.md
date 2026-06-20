@@ -1,6 +1,6 @@
 # WorldBrief · 世界速览
 
-> **中文世界信息聚合仪表盘 — 一屏速览 8 大源**
+> **中文世界信息聚合仪表盘 — 一屏速览 11 大源**
 >
 > [koala73/worldmonitor](https://github.com/koala73/worldmonitor) 的中文版 — 更轻、更聚焦中国用户、单文件可部署。
 
@@ -15,19 +15,21 @@
 
 **单文件 HTML**，打开即用 / 部署到 GitHub Pages 即可访问。
 
-聚合 8 大中文/英文信息源，**5 分钟自动刷新**，支持 AI 一句话摘要。
+聚合 11 大中文/英文信息源，**5 分钟自动刷新**，支持 AI 一句话摘要。
 
 | 数据源 | 类型 | 刷新策略 |
 |---|---|---|
+| ⭐ GitHub Trending Top 5 | 开源热度 | 5 min |
+| ⭐ GitHub Trending Top 10 | 开源热度 (rich meta) | 5 min |
 | 🔥 微博热搜 | 中文社交 | 5 min |
 | 💡 知乎热榜 | 中文问答 | 5 min |
 | 📊 36氪热榜 | 中文创投 | 5 min |
 | 🟠 Hacker News | 海外技术 | 5 min |
-| ⭐ GitHub Trending | 开源热度 | 5 min |
+| 💬 V2EX 热帖 | 海外中文 | 5 min |
 | 📺 B站热门 | 中文视频 | 5 min |
 | 🎵 抖音热搜 | 中文短视频 | 5 min |
+| ⛏️ 掘金热榜 | 中文技术 | 5 min |
 | 🌍 全球地震 | 灾害监测 | 5 min |
-
 ---
 
 ## vs worldmonitor
@@ -37,7 +39,7 @@
 | 文件数 | 1000+ | **1** |
 | 构建工具 | Vite + Tauri + 276 protos | **无** |
 | 部署 | Vercel / Docker / Electron | **GitHub Pages / 双击打开** |
-| 数据源 | 500+ 英文 | **8 个中文/海外高频** |
+| 数据源 | 500+ 英文 | **11 个中文/海外高频** |
 | AI 摘要 | Groq / OpenRouter / Ollama | **api.skillai.top（国内直连）** |
 | 主题变体 | 6 个 (world/tech/finance/...) | **1 个，专注中文** |
 | 地图 | globe.gl + deck.gl | **无地图，更快** |
@@ -128,6 +130,7 @@ const PROXY = 'https://your-cors-proxy.example.com/?url=';
 ## 路线图
 
 - [x] v0.1.0: 8 大源聚合 + AI 摘要
+- [x] v0.2.0: 11 大源 + GitHub Trending rich meta (stars/language/today)
 - [ ] v0.2.0: 用户自选数据源（点击卡片收藏）
 - [ ] v0.3.0: 关键词告警（如关注 "关税"、"地震"）
 - [ ] v0.4.0: 时间轴视图（看趋势）
