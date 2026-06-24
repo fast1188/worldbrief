@@ -4,10 +4,10 @@
 >
 > [koala73/worldmonitor](https://github.com/koala73/worldmonitor) 的中文版 — 更轻、更聚焦中国用户、单文件可部署。
 
-[![GitHub stars](https://img.shields.io/github/stars/fast118/worldbrief?style=social)](https://github.com/fast118/worldbrief/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/fast1188/worldbrief?style=social)](https://github.com/fast1188/worldbrief/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![No Build](https://img.shields.io/badge/build-none-success)](https://github.com/fast118/worldbrief)
-[![Single File](https://img.shields.io/badge/files-1-blue)](https://github.com/fast118/worldbrief)
+[![No Build](https://img.shields.io/badge/build-none-success)](https://github.com/fast1188/worldbrief)
+[![Single File](https://img.shields.io/badge/files-1-blue)](https://github.com/fast1188/worldbrief)
 
 ---
 
@@ -59,7 +59,7 @@
 
 ### 方式 1：直接打开（最简单）
 ```bash
-git clone https://github.com/fast118/worldbrief.git
+git clone https://github.com/fast1188/worldbrief.git
 cd worldbrief
 # 双击 index.html
 ```
@@ -74,9 +74,9 @@ npx http-server -p 8000
 访问 http://localhost:8000
 
 ### 方式 3：GitHub Pages（推荐）
-1. 推到 `fast118/worldbrief` 仓库
+1. 推到 `fast1188/worldbrief` 仓库
 2. Settings → Pages → Source 选 `main` 分支
-3. 几分钟后访问 `https://fast118.github.io/worldbrief/`
+3. 几分钟后访问 `https://fast1188.github.io/worldbrief/`
 
 ---
 
@@ -167,4 +167,4 @@ MIT — 自由使用、修改、商用。
 
 ![微信群](assets/wechat-qr.png)
 
-或提 [GitHub Issue](https://github.com/fast118/worldbrief/issues)
+或提 [GitHub Issue](https://github.com/fast1188/worldbrief/issues)
